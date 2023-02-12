@@ -16,9 +16,9 @@ export async function runCli() {
 
   const projectName = await promptAppName();
 
-  const [appName, path] = parseNameAndPath(projectName);
+  
 
-  createProject(appName);
+ return projectName 
 }
 const promptAppName = async (): Promise<string> => {
   const { appName } = await inquirer.prompt<Pick<CliResults, "appName">>({

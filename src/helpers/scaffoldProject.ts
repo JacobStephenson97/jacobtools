@@ -88,8 +88,10 @@ export async function scaffoldProject({
       }
     }
   }
-  console.log("🚀 ~ file: scaffoldProject.ts:22 ~ projectDir", projectDir)
-  console.log("🚀 ~ file: scaffoldProject.ts:22 ~ srcDir", srcDir)
-  fs.copyFileSync(srcDir, projectDir);
-  
+ const scaffoldedName =
+    projectName === "." ? "App" : chalk.cyan.bold(projectName);
+  fs.copySync(srcDir, projectDir);
+    spinner.succeed(
+    `${scaffoldedName} ${chalk.green("scaffolded successfully!")}\n`,
+  );
 }

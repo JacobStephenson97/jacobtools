@@ -10,7 +10,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx src/index.ts",
-    "build": "tsup"
+    "build": "tsup",
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -28,7 +29,7 @@
   },
   "dependencies": {
     "chalk": "^5.2.0",
-    "commander": "^10.0.0",
+    "commander": "^9.4.1",
     "fs-extra": "^11.1.0",
     "inquirer": "^9.1.2",
     "ora": "^6.1.2"
