@@ -1,16 +1,16 @@
-## jacobtools-node
+# jacobtools-node
 
 Quickest start to a new nodejs app using typescript
 
-## Test it out!
+# Test it out!
 
-# npm
+## npm
 
 ```
 npx jacobtools@latest
 ```
 
-# pnpm
+## pnpm
 
 ```
 pnpm dlx jacobtools@latest
