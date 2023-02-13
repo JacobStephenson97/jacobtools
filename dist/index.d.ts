@@ -1,2 +1,8 @@
+type AppOptions = {
+    projectName: string;
+    packages: string[];
+    templateDirectory: string;
+    userDirectory: string;
+};
 
-export { }
+export { AppOptions };
