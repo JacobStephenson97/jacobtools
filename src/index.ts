@@ -62,13 +62,6 @@ async function main() {
             await fs.emptyDir(options.userDirectory);
         }
     }
-    try {
-        fs.copySync(baseTemplateDirectory, options.userDirectory);
-        fs.renameSync(options.userDirectory + "/_env", options.userDirectory + "/.env");
-    } catch (e) {
-        console.error(e);
-        process.exit(1);
-    }
 
 
     options.packages = (await inquirer.prompt<{ optIns: string[]; }>({
@@ -83,16 +76,26 @@ async function main() {
     })).optIns.map((e) => e.toLowerCase());
 
     //remove the packages from the list for now
-    if (options.packages.includes("Discord.js")) {
+    if (options.packages.includes("discord.js")) {
         console.log("Dicord.js not implemented yet, skipping...");
         options.packages = options.packages.filter((e) => e !== "Discord.js");
     }
-    if (options.packages.includes("Prisma")) {
+    if (options.packages.includes("prisma")) {
         console.log("Prisma not implemented yet, skipping...");
         options.packages = options.packages.filter((e) => e !== "Prisma");
     }
 
-    //TODO: add the packages to the package.json
+
+    //copy base directory 
+    try {
+        fs.copySync(baseTemplateDirectory, options.userDirectory);
+        fs.renameSync(options.userDirectory + "/_env", options.userDirectory + "/.env");
+    } catch (e) {
+        console.error(e);
+        process.exit(1);
+    }
+
+    //update package.json
     const currentPckg = await fs.readJSON(path.join(options.userDirectory, "package.json"));
     if (options.packages.includes("fastify")) {
         const deps = requiredFastifyPackages;
@@ -104,9 +107,9 @@ async function main() {
             }
         }, { spaces: 2 });
     }
-
-    //TODO: Find and move the correct index.ts file
+    //get correct index file from template/index
     updateIndex(options);
+
     await installDeps(options);
     void finished(projectName, options);
 }
