@@ -64,6 +64,7 @@ async function main() {
     }
     try {
         fs.copySync(baseTemplateDirectory, options.userDirectory);
+        fs.renameSync(options.userDirectory + "/_env", options.userDirectory + "/.env");
     } catch (e) {
         console.error(e);
         process.exit(1);
