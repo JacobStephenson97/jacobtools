@@ -1,7 +1,7 @@
 {
-  "name": "jacobtools-node",
+  "name": "jacobtools",
   "bin": {
-    "jacobtools-node": "dist/index.js"
+    "jacobtools": "dist/index.js"
   },
   "version": "0.0.2b",
   "description": "",
