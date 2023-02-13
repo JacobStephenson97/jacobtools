@@ -1,6 +1,6 @@
 # jacobtools-node
 
-Quickest start to a new nodejs app using typescript
+Quickest way start to a new nodejs app using typescript
 
 # Test it out!
 
