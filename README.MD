@@ -7,13 +7,13 @@ Quickest start to a new nodejs app using typescript
 ## npm
 
 ```
-npx jacobtools@latest
+npx jacobtools-node@latest
 ```
 
 ## pnpm
 
 ```
-pnpm dlx jacobtools@latest
+pnpm dlx jacobtools-node@latest
 ```
 
 ## WIP
