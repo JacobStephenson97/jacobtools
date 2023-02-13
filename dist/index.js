@@ -2,7 +2,7 @@
 import inquirer from "inquirer";
 import path3 from "path";
 import fs2 from "fs-extra";
-import chalk from "chalk";
+import chalk2 from "chalk";
 
 // src/consts.ts
 import path from "path";
@@ -62,14 +62,49 @@ var requiredFastifyPackages = getPackageJson({
   dependencies: "fastify"
 });
 
+// src/utils/getPackageManager.ts
+var getUserPackageManager = () => {
+  const userAgent = process.env.npm_config_user_agent;
+  if (userAgent?.startsWith("yarn"))
+    return "yarn";
+  if (userAgent?.startsWith("pnpm"))
+    return "pnpm";
+  return "npm";
+};
+
+// src/helpers/installDeps.ts
+import chalk from "chalk";
+import { exec } from "child_process";
+import ora from "ora";
+import { promisify } from "util";
+var execa = promisify(exec);
+async function installDeps(options) {
+  console.log(
+    `
+${chalk.blue("Using")} ${chalk.bold(
+      chalk.yellow(options.packageManager.toUpperCase())
+    )} ${chalk.bold(chalk.blue("as package manager"))}`
+  );
+  const spinner = ora("Installing dependencies").start();
+  try {
+    await execa(`${options.packageManager} install`, { cwd: options.userDirectory });
+    spinner.succeed("Installed dependencies");
+  } catch (e) {
+    spinner.fail(`Couldn't install template dependencies: ${e}`);
+    process.exit(1);
+  }
+}
+
 // src/index.ts
 async function main() {
   const options = {
     projectName: "jstack",
     packages: [],
     userDirectory: path3.resolve(process.cwd(), "jstack"),
-    templateDirectory
+    templateDirectory,
+    packageManager: getUserPackageManager()
   };
+  console.log(options.packageManager);
   const { projectName } = await inquirer.prompt({
     name: "projectName",
     type: "input",
@@ -131,14 +166,16 @@ async function main() {
         ...currentPckg.dependencies,
         ...deps.dependencies
       }
-    });
+    }, { spaces: 2 });
   }
   updateIndex(options);
-  void finished(projectName);
+  await installDeps(options);
+  void finished(projectName, options);
 }
 await main();
-async function finished(projectName) {
-  console.log(`${chalk.green(`cd ${projectName}`)}`);
+async function finished(projectName, options) {
+  console.log(`${chalk2.green(`cd ${projectName}`)}`);
+  console.log(`${chalk2.green(`${options.packageManager} run dev`)}`);
   process.exit(0);
 }
 //# sourceMappingURL=index.js.map

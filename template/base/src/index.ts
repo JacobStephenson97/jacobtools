@@ -1,4 +1,4 @@
-function test(test: string) {
-    console.log(test);
+function main() {
+    console.log("Hello, world!");
 }
-test('test');
+main();

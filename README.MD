@@ -14,6 +14,7 @@ Quickest start to a new nodejs app using typescript
     - Better overwrite logic
     - Error checking on app name
     - More checks/options for getting project name / path
+    - Correct ts config and es lint
 
 ## Heavily inspired by:
 

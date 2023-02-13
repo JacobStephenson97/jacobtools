@@ -3,6 +3,7 @@ type AppOptions = {
     packages: string[];
     templateDirectory: string;
     userDirectory: string;
+    packageManager: "npm" | "yarn" | "pnpm";
 };
 
 export { AppOptions };

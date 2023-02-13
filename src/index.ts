@@ -7,12 +7,15 @@ import getPackageIndex from "./utils/getPackageIndex.js";
 import { updateIndex } from "./helpers/updateIndex.js";
 import { getPackageJson } from "./helpers/packages.js";
 import { requiredFastifyPackages } from "./packages/fastify/index.js";
+import { getUserPackageManager } from "./utils/getPackageManager.js";
+import { installDeps } from "./helpers/installDeps.js";
 
 export type AppOptions = {
     projectName: string;
     packages: string[];
     templateDirectory: string;
     userDirectory: string;
+    packageManager: "npm" | "yarn" | "pnpm";
 };
 
 async function main() {
@@ -20,9 +23,11 @@ async function main() {
         projectName: "jstack",
         packages: [],
         userDirectory: path.resolve(process.cwd(), "jstack"),
-        templateDirectory
+        templateDirectory,
+        packageManager: getUserPackageManager()
     };
 
+    console.log(options.packageManager);
 
 
     const { projectName } = await inquirer.prompt<{ projectName: string; }>({
@@ -88,23 +93,25 @@ async function main() {
     const currentPckg = await fs.readJSON(path.join(options.userDirectory, "package.json"));
     if (options.packages.includes("fastify")) {
         const deps = requiredFastifyPackages;
-        fs.writeJSONSync(path.join(options.userDirectory, "package.json"), {
+        fs.writeJSONSync(path.join(options.userDirectory, "package.json",), {
             ...currentPckg,
             dependencies: {
                 ...currentPckg.dependencies,
                 ...deps.dependencies
             }
-        });
+        }, { spaces: 2 });
     }
+
     //TODO: Find and move the correct index.ts file
     updateIndex(options);
-
-    void finished(projectName);
+    await installDeps(options);
+    void finished(projectName, options);
 }
 await main();
 
 
-async function finished(projectName: string) {
+async function finished(projectName: string, options: AppOptions) {
     console.log(`${chalk.green(`cd ${projectName}`)}`);
+    console.log(`${chalk.green(`${options.packageManager} run dev`)}`);
     process.exit(0);
 };
