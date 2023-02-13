@@ -2,6 +2,8 @@
 
 A (soon to be) great way start to a new nodejs app using typescript!
 
+The only package that does anything currently is fastify
+
 # Test it out!
 
 ## npm
