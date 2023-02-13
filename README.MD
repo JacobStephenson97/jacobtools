@@ -35,7 +35,3 @@ pnpm dlx jacobtools-node@latest
 
 - [create-t3-app](https://github.com/t3-oss/create-t3-app)
 - [create-jd-app](https://github.com/OrJDev/create-jd-app)
-
-```
-
-```
