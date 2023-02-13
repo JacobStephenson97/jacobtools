@@ -3,7 +3,7 @@
   "bin": {
     "jacobtools": "dist/index.js"
   },
-  "version": "0.0.1d",
+  "version": "0.0.1e",
   "description": "",
   "main": "dist/index.js",
   "type": "module",
