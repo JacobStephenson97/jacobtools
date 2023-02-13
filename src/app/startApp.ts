@@ -3,11 +3,18 @@ import path from "path";
 import { templateDirectory, baseTemplateDirectory } from "../consts.js";
 import { installDeps } from "../helpers/installDeps.js";
 import { updateIndex } from "../helpers/updateIndex.js";
-import { AppOptions } from "../index.js";
 import { requiredFastifyPackages } from "../packages/fastify/index.js";
 import { getUserPackageManager } from "../utils/getPackageManager.js";
 import fs from "fs-extra";
 import chalk from "chalk";
+
+export type AppOptions = {
+    projectName: string;
+    packages: string[];
+    templateDirectory: string;
+    userDirectory: string;
+    packageManager: "npm" | "yarn" | "pnpm";
+};
 
 export async function startApp() {
 
