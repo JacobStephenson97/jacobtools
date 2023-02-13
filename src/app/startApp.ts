@@ -26,9 +26,6 @@ export async function startApp() {
         packageManager: getUserPackageManager()
     };
 
-    console.log(options.packageManager);
-
-
     const { projectName } = await inquirer.prompt<{ projectName: string; }>({
         name: "projectName",
         type: "input",
