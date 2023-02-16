@@ -3,14 +3,16 @@ import path from "path";
 import { templateDirectory, baseTemplateDirectory } from "../consts.js";
 import { installDeps } from "../helpers/installDeps.js";
 import { updateIndex } from "../helpers/updateIndex.js";
-import { requiredFastifyPackages } from "../packages/fastify/index.js";
 import { getUserPackageManager } from "../utils/getPackageManager.js";
 import fs from "fs-extra";
 import chalk from "chalk";
+import { getPackageJson, KeyOrKeyArray } from "../helpers/packages.js";
+import _ from "lodash";
+export type AvailablePackages = "fastify" | "discord.js" | "prisma";
 
 export type AppOptions = {
     projectName: string;
-    packages: string[];
+    packages: AvailablePackages[];
     templateDirectory: string;
     userDirectory: string;
     packageManager: "npm" | "yarn" | "pnpm";
@@ -58,25 +60,21 @@ export async function startApp() {
     }
 
 
-    options.packages = (await inquirer.prompt<{ optIns: string[]; }>({
+    options.packages = (await inquirer.prompt<{ optIns: AvailablePackages[]; }>({
         name: "optIns",
         type: "checkbox",
         message: "What would you like to include?",
         choices: [
-            "Fastify",
-            "Discord.js",
-            "Prisma"
+            "fastify",
+            "discord.js",
+            "prisma"
         ],
-    })).optIns.map((e) => e.toLowerCase());
+    })).optIns;
 
-    //remove the packages from the list for now
-    if (options.packages.includes("discord.js")) {
-        console.log("Dicord.js not implemented yet, skipping...");
-        options.packages = options.packages.filter((e) => e !== "Discord.js");
-    }
+
     if (options.packages.includes("prisma")) {
         console.log("Prisma not implemented yet, skipping...");
-        options.packages = options.packages.filter((e) => e !== "Prisma");
+        options.packages = options.packages.filter((e) => e !== "prisma");
     }
 
 
@@ -88,18 +86,17 @@ export async function startApp() {
         console.error(e);
         process.exit(1);
     }
-
+    const deps = getPackageJson(
+        options.packages,
+    );
     //update package.json
     const currentPckg = await fs.readJSON(path.join(options.userDirectory, "package.json"));
+
+    const newPackages = _.merge(currentPckg, deps);
+    console.log("🚀 ~ file: startApp.ts:97 ~ startApp ~ newPackages", newPackages);
     if (options.packages.includes("fastify")) {
-        const deps = requiredFastifyPackages;
-        fs.writeJSONSync(path.join(options.userDirectory, "package.json",), {
-            ...currentPckg,
-            dependencies: {
-                ...currentPckg.dependencies,
-                ...deps.dependencies
-            }
-        }, { spaces: 2 });
+        fs.writeJSONSync(path.join(options.userDirectory, "package.json",), newPackages, { spaces: 2 });
+
     }
     //get correct index file from template/index
     updateIndex(options);
