@@ -6,8 +6,9 @@ import { updateIndex } from "../helpers/updateIndex.js";
 import { getUserPackageManager } from "../utils/getPackageManager.js";
 import fs from "fs-extra";
 import chalk from "chalk";
-import { getPackageJson, KeyOrKeyArray } from "../helpers/packages.js";
+import { getPackageJson } from "../helpers/packages.js";
 import _ from "lodash";
+import { fixEnv } from "../helpers/fixEnv.js";
 export type AvailablePackages = "fastify" | "discord.js" | "prisma";
 
 export type AppOptions = {
@@ -100,10 +101,12 @@ export async function startApp() {
     }
     //get correct index file from template/index
     updateIndex(options);
+    //update env
+    await fixEnv(options);
 
     await installDeps(options);
     void finished(projectName, options);
-}
+};
 
 async function finished(projectName: string, options: AppOptions) {
     console.log(`${chalk.green(`cd ${projectName}`)}`);

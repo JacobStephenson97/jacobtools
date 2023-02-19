@@ -33,7 +33,9 @@ export function getPackageJson(packages: AvailablePackages[]) {
 
     for (const pckg of packages) {
         console.log(pckg);
+        const mergeTime = console.time("mergeTime");
         _.merge(dependencies, extraPackages[pckg]);
+        console.timeEnd("mergeTime");
     }
     // console.log("🚀 ~ file: packages.ts:24 ~ getPackageJson ~ packages", packages);
     // for (const dependencyType in packages) {
