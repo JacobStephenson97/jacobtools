@@ -94,7 +94,6 @@ export async function startApp() {
     const currentPckg = await fs.readJSON(path.join(options.userDirectory, "package.json"));
 
     const newPackages = _.merge(currentPckg, deps);
-    console.log("🚀 ~ file: startApp.ts:97 ~ startApp ~ newPackages", newPackages);
     if (options.packages.includes("fastify")) {
         fs.writeJSONSync(path.join(options.userDirectory, "package.json",), newPackages, { spaces: 2 });
 
@@ -103,7 +102,6 @@ export async function startApp() {
     updateIndex(options);
     //update env
     await fixEnv(options);
-
     await installDeps(options);
     void finished(projectName, options);
 };

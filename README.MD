@@ -21,9 +21,7 @@ pnpm dlx jacobtools@latest
 ## WIP
 
 - Base template, an esbuild setup, with hot reloading and nice dev deps from the start
-- Fastify, when you want to spin up an api quickly
 - Prisma, when you need a database
-- Discordjs, for discord bots
 
 ## TODO
 

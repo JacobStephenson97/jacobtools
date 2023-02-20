@@ -1,4 +1,4 @@
-import { AppOptions } from "../index.js";
+import { AppOptions } from "../app/startApp.js";
 
 export default function getPackageIndex(options: AppOptions): string {
     const includeFastify = options.packages.includes("fastify");
@@ -11,5 +11,7 @@ export default function getPackageIndex(options: AppOptions): string {
     if (includeFastify) {
         return `${options.templateDirectory}/index/with_fastify.ts`;
     }
-    else return "";
+    else {
+        throw new Error("No package selected");
+    };
 }
